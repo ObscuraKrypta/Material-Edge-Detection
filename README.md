@@ -71,7 +71,7 @@ Development Location: Clausthal-Zellerfeld, Germany
 Date: November 2024 – March 2025
 
 License
-This project is open-source and free to use for academic and research purposes. For commercial use, please contact the author.
+This project is open-source and free to use for academic and research purposes.
 
 
 
