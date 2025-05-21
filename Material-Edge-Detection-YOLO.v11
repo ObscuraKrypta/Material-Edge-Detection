@@ -1,0 +1,464 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "eb158489",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "!pip install ultralytics"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "fbf6b6dc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "!python.exe -m pip install --upgrade pip"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "45e5c361",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import ultralytics\n",
+    "ultralytics.checks()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d6dab5ff",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import torch\n",
+    "import torchvision\n",
+    "\n",
+    "print(\"PyTorch version:\", torch.__version__)\n",
+    "print(\"Torchvision version:\", torchvision.__version__)\n",
+    "print(\"Is CUDA available?\", torch.cuda.is_available())\n",
+    "print(\"CUDA version:\", torch.version.cuda)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9d09e4de",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import torch\n",
+    "\n",
+    "device = torch.device(\"cuda\" if torch.cuda.is_available() else \"cpu\")\n",
+    "print(\"PyTorch is using:\", device)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "5d833708",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "torch.cuda.set_device(0)\n",
+    "print(\"Using GPU:\", torch.cuda.get_device_name(0))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "92f57d62",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from ultralytics import YOLO\n",
+    "from IPython.display import Image"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1d64bc70",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "!pip install roboflow"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "7d6b519c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "!pip install roboflow\n",
+    "\n",
+    "from roboflow import Roboflow\n",
+    "rf = Roboflow(api_key=\"6poXdYyrFrSACnYvaNFT\")\n",
+    "project = rf.workspace(\"ecs-hj1jt\").project(\"linescanedgedetection\")\n",
+    "version = project.version(1)\n",
+    "dataset = version.download(\"yolov11\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c0d71bd2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "dataset.location"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "c718d2e0",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import torch\n",
+    "torch.cuda.empty_cache()  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "d27af1d5",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import torch\n",
+    "print(\"GPU Available:\", torch.cuda.is_available())\n",
+    "print(\"Current Device:\", torch.cuda.current_device())\n",
+    "print(\"Device Name:\", torch.cuda.get_device_name(0))\n",
+    "print(\"PyTorch Running on:\", \"GPU\" if torch.cuda.is_available() else \"CPU\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "76ffe1f3",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import torch\n",
+    "print(torch.__version__)  \n",
+    "print(torch.version.cuda)  \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ac2a0170",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import os\n",
+    "\n",
+    "print(\"Train Path Exists:\", os.path.exists(\"M:/LineScanEdgeDetection-1/train/images\"))\n",
+    "print(\"Val Path Exists:\", os.path.exists(\"M:/LineScanEdgeDetection-1/valid/images\"))\n",
+    "print(\"Test Path Exists:\", os.path.exists(\"M:/LineScanEdgeDetection-1/test/images\"))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4f4ae82b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "!yolo task=detect mode=train data=\"M://LineScanEdgeDetection-1/data.yaml\" model=\"yolo11n.pt\" epochs=100 imgsz=640 device=0 batch=4 \n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "29fb6931",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import torch\n",
+    "from ultralytics import YOLO\n",
+    "import cv2\n",
+    "\n",
+    "model_path = \"runs/detect/train30/weights/best.pt\"\n",
+    "\n",
+    "model = YOLO(model_path)\n",
+    "\n",
+    "image_path = \"C:/Users/sk20.TU-CLAUSTHAL/Desktop/original.PNG\"\n",
+    "\n",
+    "image = cv2.imread(image_path)\n",
+    "\n",
+    "results = model(image_path, save=True)\n",
+    "\n",
+    "print(\"test done and the image saved.\")\n",
+    "print(\"output path\", results[0].save_dir)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "ff2cad21",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Image(\"/content/runs/detect/train/confusion_matrix.png\", width=600) #confusion matrix"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "01b36b69",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Image(\"/content/runs/detect/train/labels.jpg\", width=600) #plot the labels, how many labels/classes we had."
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "49b771fe",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Image(\"/content/runs/detect/train/results.png\", width=600) #evaluation matrix"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "293abe28",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Image(\"/content/runs/detect/train/train_batch0.jpg\", width=600) #batch images"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "49024114",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#validation fine-tuned model\n",
+    "!yolo task=detect mode=val model=\"/content/runs/detect/train/weights/best.pt\" data={dataset.location}/data.yaml"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "fa6fe983",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Inference with custom model on Images\n",
+    "!yolo task=detect mode=predict model=\"/content/runs/detect/train/weights/best.pt\" conf=0.25 , source={dataset.location}/test/images save=True"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "445a227b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# showing the detection\n",
+    "import glob\n",
+    "import os \n",
+    "from IPython.display import Image as IPyImage, display\n",
+    "\n",
+    "latest_folder= max(glob.glob('/content/runs/detect/predict*/'), key=os.path.getmtime)\n",
+    "for img in glob.glob(f'{latest_folder}/*.jpg')[1:4]:\n",
+    "    display(IPyImage(filename=img, width=600))\n",
+    "    print(\"\\n\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "333eb3ee",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#testing on one image\n",
+    "!gdown \"image path\" "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "56b88a45",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "!yolo task=detect mode=predict model=\"/content/runs/detect/train/weights/best.pt\" conf=0.25  , source=image.jpg save=True"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "91a99fc7",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Image(\"/content/runs/detect/predict2/image.jpg\", width=600)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "39379f6f",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#Testing on video\n",
+    "!gdown \"video's path\""
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "78ed9799",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "!yolo task=detect mode=predict model=\"/content/runs/detect/train/weights/best.pt\" conf=0.25  , source=\"video.mp4\" save=True"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9de338fc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from IPython.display import HTML\n",
+    "from base64 import b64encode\n",
+    "import os \n",
+    "\n",
+    "#input video path\n",
+    "save_path= \"/content/runs/detect/predict3/video.avi\"\n",
+    "\n",
+    "#Compressed video path\n",
+    "compressed_path= \"/content/result_compressed.mp4\"\n",
+    "\n",
+    "os.system(f\"ffmpeg -i {save_path} -vcodec libx264 {compressed_path}\")\n",
+    "\n",
+    "#show video\n",
+    "mp4= open(compressed_path, 'rb').read()\n",
+    "data_url= \"data:video/mp4;base64,\" + b64encode(mp4).decode()\n",
+    "HTML(\"\"\"\n",
+    "<video width=400 controls>\n",
+    "        <source src=\"%s\" type=\"video/mp4\">\n",
+    "</video>\n",
+    "\"\"\" % data_url)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "78cfed38",
+   "metadata": {},
+   "source": [
+    "Segmentation model"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "847f9b9b",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#segmentation model\n",
+    "#load the model (nano)\n",
+    "model= YOLO(\"yolo11n-seg.pt\")\n",
+    "\n",
+    "#train the model\n",
+    "train_results=model.train(\n",
+    "    data=\"M://LineScanEdgeDetection-1/data.yaml\", #path to dataset YAML\n",
+    "    epochs=500, #number of training epochs\n",
+    "    imgsz= 640,#training images size\n",
+    "    device=0, #device to run on, device=0 or device=1,2,... or device=cpu\n",
+    ")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "357b8db2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from IPython.display import Image"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "3b74cdb2",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "Image(\"M:/runs/segment/train21/results.png\", width=600)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1532fb39",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "model=YOLO(\"M:/runs/segment/train21/weights/best.pt\")\n",
+    "results=model(\"C:/Users/sk20.TU-CLAUSTHAL/Desktop/edge-1.jpg\", save=True)\n",
+    "results[0].show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0a9529be",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# video with line scan and mix of material.\n",
+    "\n",
+    "model=YOLO(\"M:/runs/segment/train21/weights/best.pt\")\n",
+    "results=model(\"C:/Users/sk20.TU-CLAUSTHAL/Desktop/video-3_LW3TB9v4.avi\", save=True)\n",
+    "results[0].show()"
+   ]
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.13"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

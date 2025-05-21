@@ -1,0 +1,13 @@
+train: M:/LineScanEdgeDetection-1/train/images
+val:   M:/LineScanEdgeDetection-1/valid/images
+test:  M:/LineScanEdgeDetection-1/test/images
+
+nc: 2
+names: ['sharp', 'smooth']
+
+roboflow:
+  workspace: ecs-hj1jt
+  project: linescanedgedetection
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/ecs-hj1jt/linescanedgedetection/dataset/1
