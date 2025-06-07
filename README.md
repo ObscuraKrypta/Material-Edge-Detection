@@ -1,77 +1,103 @@
-# Material-Edge-Detection
+# Material Edge Detection using YOLOv11 and Line Scan Camera
 
-This project implements a YOLOv11-based model for detecting and classifying the **shape** of small materials (1–4 mm), such as *sharp-edged* or *smooth* particles, moving on a conveyor belt. The system is developed for use in eddy current separator (ECS) machines in industrial recycling environments.
+This repository provides a complete implementation of a YOLOv11-based material edge detection model, optimized for identifying **sharp vs. smooth edges** of metallic and plastic particles (1–4 mm) on a **moving conveyor belt** of an **Eddy Current Separator (BECS)** using a **monochrome line scan camera**, ELP camera and Raspberry Pi camera.
 
-##  Model Overview
+> This work is part of the "Twin-AI BECS" project for intelligent waste separation and fire risk mitigation in recycling systems.
 
-- **Model**: YOLOv11n-seg (custom-trained)
-- **Framework**: PyTorch
-- **Purpose**: Real-time detection of material shapes (sharp vs. smooth)
-- **Application**: Improving separation quality and preventing damage in ECS systems
-
-##  Files
-
-- `Material-Edge-Detection-YOLO.v11`: Main Python file containing model architecture and inference logic
-- `data.yaml`: YOLO-format dataset configuration file
+---
 
 ##  Dataset
 
-The dataset used in this project includes:
-- Annotated images of sharp and smooth materials
-- Segmentation masks and bounding boxes
-- YOLO-compatible format
+- **Source**: [Roboflow - LineScanEdgeDetection](https://universe.roboflow.com/ecs-hj1jt/linescanedgedetection)
+- **Classes**: `sharp`, `smooth`
+- **Image Type**: Monochrome line scan images + RGB image 
+- **Format**: YOLO.v11 format
+- **Data split**: 70% training / 20% validation / 10% test
 
- **Hosted on Kaggle**  
-Due to GitHub's file size limitations, the complete dataset is hosted on Kaggle.  
- [Kaggle Dataset Link](https://www.kaggle.com/USERNAME/DATASET-NAME)  
-*(Replace with the actual link once available)*
+---
 
-##  How to Run
+##  Project Features
 
- # Clone the repository:
-   ```bash
-   git clone https://github.com/ObscuraKrypta/Material-Edge-Detection.git
-   cd Material-Edge-Detection
-    ```
+- Detection of **sharp** and **smooth** metallic materials
+- Designed for **real-time** inference in industrial settings
+- Based on **YOLOv11 architecture**
+- Model exported and tested in`.pt` 
 
+---
 
+---
 
-#Install dependencies
+##  Requirements
+
+Install the dependencies in a Python virtual environment:
+
 ```bash
 pip install -r requirements.txt
-    ```
+```
 
-Download the dataset from Kaggle and extract into datasets/ folder.
+##  Typical key packages:
+- torchvision
+- torch
+- ultralytics
+- opencv-python
+- matplotlib
+- numpy
 
-# Train the model
-```bash
-python train.py --data data.yaml --weights yolov11n-seg.pt --epochs 100
-    ```
+##  How to Train
+Clone the repository:
+```
+git clone https://github.com/ObscuraKrypta/Material-Edge-Detection.git
+cd Material-Edge-Detection
+```
 
-#Run inference
-```bash
-python detect.py --source path/to/image_or_video --weights best.pt
-    ```
+## Train the model:
+```
+yolo task=detect mode=train model=yolov11.yaml data=data.yaml epochs=100 imgsz=640
+```
+
+# NOTE: 
+You can adjust batch, imgsz, and epochs according to your system capacity.
 
 
-##Use Cases
-- Industrial recycling optimization
+## Inference / Testing:
 
-- Smart ECS machine control
+To run inference on test images or live camera feed:
 
-- Preventive maintenance via edge shape analysis
+```
+yolo task=detect mode=predict model=runs/train/exp/weights/best.pt source=test_images/
+```
 
-## Development Info
-Author: Shohreh Kia
+## Deployment Notes:
+- For embedded deployment, convert the model to ONNX or TensorRT.
+- The model is designed to process continuous line scan strips with minimal latency.
 
-Version: v1.0
 
-Development Location: Clausthal-Zellerfeld, Germany
+## Related Work:
+# This model is part of a larger system including:
 
-Date: November 2024 – March 2025
+- Fire and smoke detection using thermal camera.
+- AI-based optimization of drum and conveyor speeds.
+- Auto belt misalignment correction.
+- IoT-based remote control and alerting.
 
-License
-This project is open-source and free to use for academic and research purposes.
+
+ ## Acknowledgments:
+
+ Special thanks to Professor Daniel Goldmann and the IFAD Institute for their cooperation and support in providing access to the eddy current machine. We also sincerely appreciate the valuable assistance of technicians Jean-Marie Dornbusch and Olaf Tschenscher.
+
+
+ ##  Contact:
+ For questions, suggestions, or collaboration:
+ 
+ Prof. Dr. Benjamin Leiding
+ - Professor at DIGIT – Center for Digital Technologies -> benjamin.leiding@tu-clausthal.de
+ 
+ Shohreh Kia
+ - Researcher at DIGIT – Center for Digital Technologies -> shohreh.kia@tu-clausthal.de
+
+
+
+
 
 
 
